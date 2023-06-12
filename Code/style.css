@@ -1,0 +1,14 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+#animalCrossing, #residentEvil, #stardewValley, #deathsDoor {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+}
