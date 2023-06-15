@@ -1,70 +1,62 @@
 //songs
 let currentGameIndex = 0;
 let currentSongIndex = 0;
-let gameTitle = ["AC", "RE", "SDV", "DD"];
+let currentUriIndex = 0;
+let gameTitle = ["Animal Crossing: New Horizons", "Resident Evil 2", "Stardew Valley", "Death's Door"];
 let songTitle = ["KK Slider", "Safe Room", "Moonlight Jellies", "Crow's Ballad"];
-
-//gradient
-const Y_AXIS = 1;
-const X_AXIS = 2;
-let b1, b2, c1, c2;
+let trackIds = ["spotify:track:5QThTYJveDHE40f4zODdyo", "spotify:track:5inqbGqSc2i7iBOrgOlIaA", "spotify:track:5zMfTGSh3e9F1vp8TBq9hZ", "spotify:track:2lcpf7FgQHlSKzg1A1NF6b"];
 
 //trail
 let trail = [];
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-
-    // Define colors
-    b1 = color(255);
-    b2 = color(0);
-    c1 = color(204, 102, 0);
-    c2 = color(0, 102, 153);
-
+    frameRate(1000);
     angleMode(DEGREES);
     colorMode(HSB, 360, 100, 100, 100);
     noStroke();
-    divAc = select("#animalCrossing");
-    divRe = select("#residentEvil");
-    divSv = select("#stardewValley");
-    divDd = select("#deathsDoor");
 }
 
 function draw() {
-
+  background('white');
   if (currentGameIndex === 0) {
     animalCrossing();
-    divAc.show();
-    divRe.hide();
-    divSv.hide();
-    divDd.hide();
   } else if (currentGameIndex === 1) {
     residentEvil();
-    divAc.hide();
-    divRe.show();
-    divSv.hide();
-    divDd.hide();
   } else if (currentGameIndex === 2) {
     stardewValley();
-    divAc.hide();
-    divRe.hide();
-    divSv.show();
-    divDd.hide();
   } else if (currentGameIndex === 3) {
     deathsDoor();
-    divAc.hide();
-    divRe.hide();
-    divSv.hide();
-    divDd.show();
   }
  
   //Text
-  textAlign(CENTER, CENTER);
-  textSize(120);
+  textFont('bookmania');
+  textStyle(ITALIC);
+  textAlign(CENTER);
+  textSize(72);
   text(gameTitle[currentGameIndex], width/2, height/2);
+  textFont('roc-grotesk');
+  textStyle(NORMAL);
   textAlign(RIGHT);
-  textSize(24);
-  text(songTitle[currentGameIndex], width - 72, height - 72);
+  textSize(16);
+  text('use right click to change scene & song', width - 72, 72);
+  textAlign(LEFT);
+  textSize(16);
+  text('use left click to draw', 72, 72);
+  textAlign(RIGHT);
+  textSize(16);
+  textWrap(WORD);
+  text('Relax and sketch to some of my favorite tracks in various video games', width  * .76, height * .9, width * .2, height * .25);
+
+}
+
+function mouseReleased() {
+  if (mouseButton === RIGHT) {
+  currentGameIndex = (currentGameIndex + 1) % gameTitle.length;
+  currentSongIndex = (currentSongIndex + 1) % songTitle.length;
+  currentUriIndex =  (currentUriIndex + 1) % trackIds.length;
+  trail.length = 0;
+  }
 }
 
 function keyPressed() {
@@ -73,6 +65,8 @@ function keyPressed() {
     currentSongIndex = (currentSongIndex + 1) % songTitle.length;
   }
 }
+
+
 
 function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
   let gradient = drawingContext.createRadialGradient(
@@ -86,163 +80,198 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
 
 
 function animalCrossing() {
-  background('white');
+
   radialGradient(
-    width*1.5, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(120, 100, 100, 100), //Start color
-    color(200, 100, 100, 100), //End color
+    width * 1.5, height, 0,//Start pX, pY, start circle radius
+    width * .65, height/2-120, width,//End pX, pY, End circle radius
+    color(210, 90, 90, 100), //Start color
+    color(90, 90, 80, 100), //End color
   );
   rect(0, 0, width, height);
   
 
   fill('white');
   radialGradient(
-    width/2, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(190, 100, 100, 100), //Start color
-    color(310, 100, 100, 0), //End color
+    width*1.5, height/4, 0,//Start pX, pY, start circle radius
+    width/2, height/4, width,//End pX, pY, End circle radius
+    color(210, 90, 100, 100), //Start color
+    color(310, 90, 100, 0), //End color
   );
+  
+ if (mouseIsPressed === true) {
   trail.push(createVector(mouseX, mouseY));
-  if (trail.length > 100) {
-    trail.shift();
-  }
+  let followerSize = map(mouseY, 0, height, 10, 10);
+  ellipse(mouseX, mouseY, followerSize, followerSize);
+ } if (mouseIsPressed === false || mouseIsPressed === true) {
   for (let i = 0; i < trail.length; i++) {
     let pos = trail[i];
-    let followerSize = map(i, 0, trail.length - 1, 80, 150);
+    let followerSize = map(i, 0, trail.length - 1, 100, 60);
     ellipse(pos.x, pos.y, followerSize, followerSize);
   }
-  let followerSize = map(mouseY, 0, height, 80, 80);
-  ellipse(mouseX, mouseY, followerSize, followerSize);
+};
 
   fill('white');
   radialGradient(
     width/2, height/2-120, 0,//Start pX, pY, start circle radius
     width/2, height/2-120, 380,//End pX, pY, End circle radius
-    color(360, 100, 100, 100), //Start color
-    color(360, 100, 100, 100), //End color
+    color(0, 0, 100, 100), //Start color
+    color(0, 0, 100, 100), //End color
   );
 }
 
 
 function residentEvil() {
-  background('white');
+
   radialGradient(
-    width*1.5, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(120, 50, 20, 100), //Start color
-    color(200, 100, 100, 100), //End color
+    width * 1.5, height, 0,//Start pX, pY, start circle radius
+    width * .65, height/2-120, width,//End pX, pY, End circle radius
+    color(270, 90, 10, 100), //Start color
+    color(180, 90, 50, 100), //End color
   );
   rect(0, 0, width, height);
   
 
   fill('white');
   radialGradient(
-    width/2, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(10, 10, 10, 100), //Start color
-    color(30, 10, 10, 0), //End color
+    width*1.5, height/4, 0,//Start pX, pY, start circle radius
+    width/2, height/4, width,//End pX, pY, End circle radius
+    color(20, 90, 80, 100), //Start color
+    color(330, 90, 60, 0), //End color
   );
-  trail.push(createVector(mouseX, mouseY));
-  if (trail.length > 100) {
-    trail.shift();
-  }
-  for (let i = 0; i < trail.length; i++) {
-    let pos = trail[i];
-    let followerSize = map(i, 0, trail.length - 1, 80, 150);
-    ellipse(pos.x, pos.y, followerSize, followerSize);
-  }
-  let followerSize = map(mouseY, 0, height, 80, 80);
-  ellipse(mouseX, mouseY, followerSize, followerSize);
+  
+  if (mouseIsPressed === true) {
+    trail.push(createVector(mouseX, mouseY));
+    let followerSize = map(mouseY, 0, height, 10, 10);
+    ellipse(mouseX, mouseY, followerSize, followerSize);
+   } if (mouseIsPressed === false || mouseIsPressed === true) {
+    for (let i = 0; i < trail.length; i++) {
+      let pos = trail[i];
+      let followerSize = map(i, 0, trail.length - 1, 100, 60);
+      ellipse(pos.x, pos.y, followerSize, followerSize);
+    }
+  };
 
   fill('white');
   radialGradient(
     width/2, height/2-120, 0,//Start pX, pY, start circle radius
     width/2, height/2-120, 380,//End pX, pY, End circle radius
-    color(360, 100, 100, 100), //Start color
-    color(360, 100, 100, 100), //End color
+    color(0, 0, 100, 100), //Start color
+    color(0, 0, 100, 100), //End color
   );
 }
 
 
 function stardewValley() {
-  background('white');
+
   radialGradient(
-    width*1.5, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(120, 150, 200, 100), //Start color
-    color(200, 100, 50, 100), //End color
+    width * 1.5, height, 0,//Start pX, pY, start circle radius
+    width * .65, height/2-120, width,//End pX, pY, End circle radius
+    color(300, 80, 80, 100), //Start color
+    color(180, 80, 80, 100), //End color
   );
   rect(0, 0, width, height);
   
 
   fill('white');
   radialGradient(
-    width/2, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(100, 150, 210, 100), //Start color
-    color(330, 100, 110, 0), //End color
+    width, height, 200,//Start pX, pY, start circle radius
+    width/2, height, width,//End pX, pY, End circle radius
+    color(50, 90, 90, 100), //Start color
+    color(150, 90, 80, 0), //End color
   );
-  trail.push(createVector(mouseX, mouseY));
-  if (trail.length > 100) {
-    trail.shift();
-  }
-  for (let i = 0; i < trail.length; i++) {
-    let pos = trail[i];
-    let followerSize = map(i, 0, trail.length - 1, 80, 150);
-    ellipse(pos.x, pos.y, followerSize, followerSize);
-  }
-  let followerSize = map(mouseY, 0, height, 80, 80);
-  ellipse(mouseX, mouseY, followerSize, followerSize);
+  
+  if (mouseIsPressed === true) {
+    trail.push(createVector(mouseX, mouseY));
+    let followerSize = map(mouseY, 0, height, 10, 10);
+    ellipse(mouseX, mouseY, followerSize, followerSize);
+   } if (mouseIsPressed === false || mouseIsPressed === true) {
+    for (let i = 0; i < trail.length; i++) {
+      let pos = trail[i];
+      let followerSize = map(i, 0, trail.length - 1, 100, 60);
+      ellipse(pos.x, pos.y, followerSize, followerSize);
+    }
+  };
 
   fill('white');
   radialGradient(
     width/2, height/2-120, 0,//Start pX, pY, start circle radius
     width/2, height/2-120, 380,//End pX, pY, End circle radius
-    color(360, 100, 100, 100), //Start color
-    color(360, 100, 100, 100), //End color
+    color(0, 0, 100, 100), //Start color
+    color(0, 0, 100, 100), //End color
   );
 }
 
 function deathsDoor() {
-  background('white');
+
   radialGradient(
-    width*1.5, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(180, 50, 100, 100), //Start color
-    color(230, 100, 100, 100), //End color
+    width + 120, height/2 - 120, 0,//Start pX, pY, start circle radius
+    width, height/2-120, width,//End pX, pY, End circle radius
+    color(140, 40, 20, 100), //Start color
+    color(240, 10, 5, 100), //End color
   );
   rect(0, 0, width, height);
   
 
   fill('white');
   radialGradient(
-    width/2, height/2-120, 0,//Start pX, pY, start circle radius
-    width/2, height/2-120, width,//End pX, pY, End circle radius
-    color(10, 30, 100, 100), //Start color
-    color(30, 10, 10, 0), //End color
+    width, height, 200,//Start pX, pY, start circle radius
+    width/2, height, width,//End pX, pY, End circle radius
+    color(340, 80, 100, 100), //Start color
+    color(90, 30, 60, 0), //End color
   );
-  trail.push(createVector(mouseX, mouseY));
-  if (trail.length > 100) {
-    trail.shift();
-  }
-  for (let i = 0; i < trail.length; i++) {
-    let pos = trail[i];
-    let followerSize = map(i, 0, trail.length - 1, 80, 150);
-    ellipse(pos.x, pos.y, followerSize, followerSize);
-  }
-  let followerSize = map(mouseY, 0, height, 80, 80);
-  ellipse(mouseX, mouseY, followerSize, followerSize);
+  
+  if (mouseIsPressed === true) {
+    trail.push(createVector(mouseX, mouseY));
+    let followerSize = map(mouseY, 0, height, 10, 10);
+    ellipse(mouseX, mouseY, followerSize, followerSize);
+   } if (mouseIsPressed === false || mouseIsPressed === true) {
+    for (let i = 0; i < trail.length; i++) {
+      let pos = trail[i];
+      let followerSize = map(i, 0, trail.length - 1, 100, 60);
+      ellipse(pos.x, pos.y, followerSize, followerSize);
+    }
+  };
 
   fill('white');
   radialGradient(
     width/2, height/2-120, 0,//Start pX, pY, start circle radius
     width/2, height/2-120, 380,//End pX, pY, End circle radius
-    color(360, 100, 100, 100), //Start color
-    color(360, 100, 100, 100), //End color
+    color(0, 0, 100, 100), //Start color
+    color(0, 0, 100, 100), //End color
   );
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+  const element = document.getElementById('animalCrossingEmbed');
+  const options = {
+    width: '100%',
+    height: '100',
+    uri: 'spotify:track:2lcpf7FgQHlSKzg1A1NF6b',
+    theme: 'dark'
+  };
+  const callback = (EmbedController) => {
+    EmbedController.addListener('ready', e => {
+      console.log('ready');
+      EmbedController.play(); 
+    });
+    EmbedController.addListener('playback_update', e => {
+      if (e.data.position === 0 && e.data.isPaused === true) {
+        EmbedController.seek(1);
+      }
+      if (e.data.position === 1000 && e.data.isPaused === true) {
+            EmbedController.play();   
+      };
+    });    
+    document.body.addEventListener('contextmenu', function(ev) { // listen for right click to change track uri
+      ev.preventDefault();
+      EmbedController.loadUri(trackIds[currentUriIndex]);
+      EmbedController.play(); 
+      return false;
+  }, false);
+  };
+  IFrameAPI.createController(element, options, callback);
+};
