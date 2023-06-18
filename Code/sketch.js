@@ -312,6 +312,14 @@ function windowResized() {
 
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
   const element = document.getElementById('animalCrossingEmbed');
+  const once = fn => {
+    let called = false;
+    return function(...args) {
+      if (called) return;
+      called = true;
+      return fn.apply(this, args);
+    };
+  };
   const options = {
     width: '100%',
     height: '100',
@@ -319,6 +327,12 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
     theme: 'dark'
   };
   const callback = (EmbedController) => {
+    const startApp = function(event) {
+      console.log("this"); // document.body, MouseEvent
+      EmbedController.play();
+    };
+    document.body.addEventListener('mousedown', once(startApp));
+    // only runs `startApp` once upon click
     EmbedController.addListener('playback_update', e => {
       if (e.data.position === 0 && e.data.isPaused === true) {
         EmbedController.seek(1);
@@ -331,8 +345,6 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
       if (event.ctrlKey || event.button == 2) {
         EmbedController.loadUri(trackIds[currentUriIndex]);
         EmbedController.play(); 
-      } else { 
-        EmbedController.play();
       }
     }, );
     document.body.addEventListener('contextmenu', function(ev) { // listen for right click to change track uri
