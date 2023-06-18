@@ -1,6 +1,12 @@
 html, body {
   margin: 0;
   padding: 0;
+
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none; 
+  -o-user-select: none;
+  user-select: none;
 }
 
 canvas {
@@ -11,4 +17,5 @@ canvas {
   position: absolute;
   bottom: 5%;
   left: 5%;
+
 }
