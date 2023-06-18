@@ -1,3 +1,10 @@
+/* References
+Radial gradient base: https://github.com/Creativeguru97/YouTube_tutorial/blob/master/p5_hacks/Gradient_effect/radical_gradient/sketch.js
+Mouse-follow trail: https://editor.p5js.org/cassie/sketches/HJC08Is67 
+First click only function: https://www.30secondsofcode.org/js/s/call-function-once/#:~:text=Ensures%20a%20function%20is%20called,it%20from%20being%20called%20again.
+Spotify API Docs: https://developer.spotify.com/documentation/embeds 
+*/
+
 //songs
 let currentGameIndex = 0;
 let currentSongIndex = 0;
@@ -13,17 +20,16 @@ var drawTrail;
 //control clck
 let controlKey = false;
 
-  //eye coords
-  var eyeW;
-  var eyeH;
+//eye coords
+var eyeW;
+var eyeH;
 
-  var eyeX1;
-  var eyeX2;
-  var eyeY1;
-  var eyeY2;
+var eyeX1;
+var eyeX2;
+var eyeY1;
+var eyeY2;
 
 //text overlay opacity
-
 var textFillOpacity;
 var imgAlpha;
 
@@ -49,6 +55,7 @@ function setup() {
     eyeY1 = height - 72 - eyeH/2;
     eyeY2 = height - 72 + eyeH/2;
 
+    //text overlay opacity
     textFillOpacity = 1;
     imgAlpha = 255;
     drawTrail = true;
@@ -56,6 +63,7 @@ function setup() {
 
 function draw() {
   background('white');
+  //draw backgrounds & trails
   if (currentGameIndex === 0) {
     animalCrossing();
   } else if (currentGameIndex === 1) {
@@ -66,6 +74,7 @@ function draw() {
     deathsDoor();
   }
 
+  //fill text white
   drawingContext.fillStyle = `rgba(255, 255, 255, ${textFillOpacity})`;
 
   //Header
@@ -116,7 +125,7 @@ function draw() {
   textFont('roc-grotesk');
   textStyle(NORMAL);
 
-  //eye mapping
+  //show + hide eye icon
   if (mouseX > eyeX1 && mouseX < eyeX2 && mouseY > eyeY1 && mouseY < eyeY2) {
     textAlign(CENTER);
     textSize(12);
@@ -125,6 +134,7 @@ function draw() {
   tint(255, 255);
   eyeToggle = image(iconEye, eyeX1, eyeY1, eyeW, eyeH);
 
+  //disable trail when clicking on eye
   if (mouseX > eyeX1 && mouseX < eyeX2 && mouseY > eyeY1 && mouseY < eyeY2) {
     drawTrail = false;
   } else {
@@ -132,34 +142,33 @@ function draw() {
   } 
 }
 
+//enable control key recognition
 function keyPressed() {
   if (keyCode === CONTROL) {
     controlKey = true;
-    console.log(controlKey, "Control pressed");
   }
 }
 
 function keyReleased() {
   if (keyCode === CONTROL) {
     controlKey = false;
-    console.log(controlKey, "NOT pressed");
   }
 }
 
+//show + hide eye click recognition
 function mouseClicked() {
   if (textFillOpacity == 1 && mouseX > eyeX1 && mouseX < eyeX2 && mouseY > eyeY1 && mouseY < eyeY2) {
     textFillOpacity = 0;
     imgAlpha = 0;
-    console.log('eye was clicked!');
   } else if (textFillOpacity == 0 && mouseX > eyeX1 && mouseX < eyeX2 && mouseY > eyeY1 && mouseY < eyeY2) {
     textFillOpacity = 1;
     imgAlpha = 255;
   } 
 }
 
+//change scene on right click or control click
 function mouseReleased() {
   if (mouseButton === RIGHT || controlKey === true) {
-  console.log("this is a right click");
   currentGameIndex = (currentGameIndex + 1) % gameTitle.length;
   currentSongIndex = (currentSongIndex + 1) % songTitle.length;
   currentUriIndex =  (currentUriIndex + 1) % trackIds.length;
@@ -167,6 +176,7 @@ function mouseReleased() {
   }
 }
 
+//establish radial gradient parent
 function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
   let gradient = drawingContext.createRadialGradient(
     sX, sY, sR, eX, eY, eR
@@ -177,9 +187,9 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
   drawingContext.fillStyle = gradient;
 }
 
-
+//game scene style functions
 function animalCrossing() {
-
+  //background color
   radialGradient(
     width * 1.5, height, 0,//Start pX, pY, start circle radius
     width * .65, height/2-120, width,//End pX, pY, End circle radius
@@ -188,7 +198,7 @@ function animalCrossing() {
   );
   rect(0, 0, width, height);
   
-
+  //trail color
   fill('white');
   radialGradient(
     width*1.5, height/4, 0,//Start pX, pY, start circle radius
@@ -197,6 +207,7 @@ function animalCrossing() {
     color(310, 90, 100, 0), //End color
   );
   
+  //trail loop
  if (mouseIsPressed === true && drawTrail != false) {
   trail.push(createVector(mouseX, mouseY));
   let followerSize = map(mouseY, 0, height, 10, 10);
@@ -211,7 +222,7 @@ function animalCrossing() {
 }
 
 function residentEvil() {
-
+  //background color
   radialGradient(
     width * 1.5, height, 0,//Start pX, pY, start circle radius
     width * .65, height/2-120, width,//End pX, pY, End circle radius
@@ -220,7 +231,7 @@ function residentEvil() {
   );
   rect(0, 0, width, height);
   
-
+  //trail color
   fill('white');
   radialGradient(
     width*1.5, height/4, 0,//Start pX, pY, start circle radius
@@ -229,6 +240,7 @@ function residentEvil() {
     color(330, 90, 60, 0), //End color
   );
   
+  //trail loop
   if (mouseIsPressed === true && drawTrail != false) {
     trail.push(createVector(mouseX, mouseY));
     let followerSize = map(mouseY, 0, height, 10, 10);
@@ -243,7 +255,7 @@ function residentEvil() {
 }
 
 function stardewValley() {
-
+  //background color
   radialGradient(
     width * 1.5, height, 0,//Start pX, pY, start circle radius
     width * .65, height/2-120, width,//End pX, pY, End circle radius
@@ -252,7 +264,7 @@ function stardewValley() {
   );
   rect(0, 0, width, height);
   
-
+  //trail color
   fill('white');
   radialGradient(
     width, height, 200,//Start pX, pY, start circle radius
@@ -261,6 +273,7 @@ function stardewValley() {
     color(150, 90, 80, 0), //End color
   );
   
+  //trail loop
   if (mouseIsPressed === true && drawTrail != false) {
     trail.push(createVector(mouseX, mouseY));
     let followerSize = map(mouseY, 0, height, 10, 10);
@@ -275,7 +288,7 @@ function stardewValley() {
 }
 
 function deathsDoor() {
-
+  //background color
   radialGradient(
     width + 120, height/2 - 120, 0,//Start pX, pY, start circle radius
     width, height/2-120, width,//End pX, pY, End circle radius
@@ -284,7 +297,7 @@ function deathsDoor() {
   );
   rect(0, 0, width, height);
   
-
+  //trail color
   fill('white');
   radialGradient(
     width, height, 200,//Start pX, pY, start circle radius
@@ -293,6 +306,7 @@ function deathsDoor() {
     color(90, 30, 60, 0), //End color
   );
   
+  //trail loop
   if (mouseIsPressed === true && drawTrail != false) {
     trail.push(createVector(mouseX, mouseY));
     let followerSize = map(mouseY, 0, height, 10, 10);
@@ -311,8 +325,8 @@ function windowResized() {
 }
 
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
-  const element = document.getElementById('animalCrossingEmbed');
-  const once = fn => {
+  const element = document.getElementById('gameTrackEmbed'); //assign div id to place embed
+  const once = fn => { //enable auto-play on first click only
     let called = false;
     return function(...args) {
       if (called) return;
@@ -323,16 +337,17 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
   const options = {
     width: '100%',
     height: '100',
-    uri: 'spotify:track:2lcpf7FgQHlSKzg1A1NF6b',
+    uri: 'spotify:track:2lcpf7FgQHlSKzg1A1NF6b', //track id from spotify url
     theme: 'dark'
   };
   const callback = (EmbedController) => {
-    const startApp = function(event) {
-      console.log("this"); // document.body, MouseEvent
+    //play on first click interaction
+    const startApp = function(event) { 
       EmbedController.play();
     };
     document.body.addEventListener('mousedown', once(startApp));
-    // only runs `startApp` once upon click
+
+    // enable constant loop on same scene
     EmbedController.addListener('playback_update', e => {
       if (e.data.position === 0 && e.data.isPaused === true) {
         EmbedController.seek(1);
@@ -341,13 +356,17 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
             EmbedController.play();   
       };
     });
+
+    //enable track change on control click
     document.addEventListener("mousedown",function(event) { // listen for control + click to change track uri
       if (event.ctrlKey || event.button == 2) {
         EmbedController.loadUri(trackIds[currentUriIndex]);
         EmbedController.play(); 
       }
     }, );
-    document.body.addEventListener('contextmenu', function(ev) { // listen for right click to change track uri
+
+   //enable track change on right click
+    document.body.addEventListener('contextmenu', function(ev) { 
       ev.preventDefault();
       EmbedController.loadUri(trackIds[currentUriIndex]);
       EmbedController.play(); 

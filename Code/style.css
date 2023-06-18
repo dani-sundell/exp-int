@@ -13,9 +13,8 @@ canvas {
   display: block;
 }
 
-#animalCrossing, #residentEvil, #stardewValley, #deathsDoor {
+#container {
   position: absolute;
   bottom: 5%;
   left: 5%;
-
 }
