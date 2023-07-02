@@ -1,91 +1,177 @@
-var burnMethods;
-var booksToBurn;
 var amount;
+var colorCharcoal = "#161E1E";
+var colorSmoke = "#2B3B3C";
+var colorKindling = "#C9994B";
+var colorBlaze = "#DD663E";
+var colorRoast = "#A25133";
+var colorBurnt = "#663B28";
+var colorAsh = "#F7EEE3";
 
 function preload(){
-	burnMethods = [
-    "assets/match.png",
-    "assets/lighter.png"
-  ];
-  booksToBurn = [
-    "assets/bookstack1.png"
-  ];
-  bookFire = [
-    "assets/bookfire2.png",
-  ];
-
-    //pick a random image
-  	var randomMethod = floor(random(burnMethods.length));
-    var randomBook = floor(random(booksToBurn.length));
-    var randomFire = floor(random(bookFire.length));
-
-  	FUEL = loadImage(burnMethods[randomMethod]);
-    BOOK = loadImage(booksToBurn[randomBook]);
-    FLAME = loadImage(bookFire[randomFire]);
-
+  FUEL = loadImage("assets/lighter.png");
+  BOOK = loadImage("assets/reader.png");
+  CIG = loadImage("assets/cigarette.png");
+  MATCH = loadImage("assets/matchbox-img.png");
+  LIGHTER = loadImage("assets/lighter-2.png");
+  LOGO = loadImage("assets/logobook.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noLoop;
-  colorMode(HSB, 100);
-  bgColor = color( random(100), 70, 60 );
 }
 
 function draw() {
-  background(bgColor);
-  //images
-  image(FUEL, 0, 0); 
-  BOOK.resize(0, 400);
-  image(BOOK, width - 350, height - 420); 
-  image(FLAME, width - 270, height - 290); 
+  clear();
+  background(220, 10);
+  blendMode(MULTIPLY);
+  noStroke();
 
-  fill(0);
+  // START logo
+/*
+  LOGO.resize(400,0);
+  image(LOGO, 600, 350);
+  fire();
+
+  erase();
+  translate(400, 310);
+  scale(0.5);
+  fire();
+  noErase(); 
+  */
+  // END logo
+
+// START logo + img
+
+/*   BOOK.resize(250,0);
+  image(BOOK, 610, 140);
+  fire(colorBlaze);
+
+  erase();
+  translate(400, 310);
+  scale(0.5);
+  fire(colorBlaze);
+  noErase();  */
+ 
+  // END logo + img
+
+  // START image with star
+  /* image(FUEL, 730, 280);
+
+  fill(colorBurnt);
+
   //star
   push();
-  translate(width/4.75, height/1.35);
-  star(0, 0, 160, 200, 30);
+  translate(800, 400);
+  star(0, 0, 80, 100, 12);
   pop();
 
-  fill(255);
-  textStyle(NORMAL);
-  textFont('brim-narrow');
-  textSize(36);
-  text('only', width/4.75, height/1.35 - 44);
-
-  fill(bgColor);
-  textFont('lisbeth-display');
-  textSize(76);
-  text('$99.99', width/4.75, height/1.35 + 32);
-
-  fill(255);
-  textFont('brim-narrow');
-  textSize(28);
-  text('per book', width/4.75, height/1.35 + 86);
-
-  //number
-  textAlign(RIGHT);
-  fill(0);
-  textFont('lisbeth-display');
-  textSize(72);
-  text('Call 1(800)SET-FIRE today!', width - 72, 72*2);
-
-
-  //type
+  erase();
   textAlign(CENTER);
-  textFont('pressio-compressed');
-  textSize(330);
-  fill(255);
-  textStyle(BOLD);
-  text('WE BURN BOOKS!', width/2, height/1.65);
+  textStyle(NORMAL);
+  textFont('lisbeth-display');
+  textSize(24);
+  text('GET A', 800, 400 - 32);
 
-  granulateRedShift(50);
+  textFont('pressio-compressed');
+  textSize(56);
+  text('FREE', 800, 400 + 20);
+
+  textFont('lisbeth-display');
+  textSize(24);
+  text('QUOTE', 800, 400 + 50);
+  noErase(); */
+ // END image with star
+
+  // START CIG
+/*   CIG.resize(300,0);
+  image(CIG, 650, 340);
+
+  fill(colorAsh);
+
+  //star
+  push();
+  translate(800, 400);
+  star(0, 0, 70, 80, 30);
+  pop(); */
+ // END CIG
+
+  // START MATCH
+/*   MATCH.resize(300,0);
+  image(MATCH, 675, 320);
+
+  fill(colorBlaze);
+
+  //star
+  push();
+  translate(800, 400);
+  star(0, 0, 70, 80, 30);
+  pop(); */
+// END MATCH
+
+// START LIGHTER
+  LIGHTER.resize(300,0);
+  image(LIGHTER, 680, 220);
+
+  fill(colorKindling);
+
+  //star
+  push();
+  translate(800, 400);
+  star(0, 0, 70, 80, 30);
+  pop();
+// END LIGHTER
+
+  granulateRedShift(20);
+  // grid();
+
 }
 
 function keyPressed() {
   if (keyCode === ENTER) {
     saveCanvas('myCanvas', 'png');
   }
+}
+
+function grid() {
+  for (let x=0;x<width;x+=50){
+    for (let y=0;y<height;y+=50){
+      stroke('rgba(0,0,0,.25)');
+      fill('rgba(0,0,0,.25)');
+   		rect(x,y,50,50); 
+      fill('rgba(0,0,0,.85)');
+      noStroke();
+      textSize(8);
+      text(x + ',' + y, x, y);
+    }
+  }
+}
+
+function fire(colorName) {
+  fill(colorName);
+  beginShape();
+  vertex(775, 250); //start shape
+  bezierVertex(  //top right curve
+    800, 250, 
+    845, 300, 
+    875, 350 /* origin point*/
+    );
+  bezierVertex( //bottom right curve
+    975, 500, 
+    900, 600, 
+    800, 600 /* origin point*/
+    ); 
+  bezierVertex( //left curve
+    700, 600, /* bottom of curve */
+    625, 475, /* top of curve */
+    750, 350 /* origin point*/
+    ); 
+    bezierVertex(
+    750, 350, 
+    800, 300, 
+    775, 250 /* origin point*/
+    ); 
+  endShape(CLOSE)
 }
 
 function star(x, y, radius1, radius2, npoints) {
@@ -102,7 +188,6 @@ function star(x, y, radius1, radius2, npoints) {
   }
   endShape(CLOSE);
 }
-
 
 function granulateRedShift(amount) {
   loadPixels();
