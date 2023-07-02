@@ -1,5 +1,6 @@
 var burnMethods;
 var booksToBurn;
+var amount;
 
 function preload(){
 	burnMethods = [
@@ -7,11 +8,10 @@ function preload(){
     "assets/lighter.png"
   ];
   booksToBurn = [
-    "assets/1984.png",
-    "assets/gatsby.png"
+    "assets/bookstack1.png"
   ];
   bookFire = [
-    "assets/bookfire1.png",
+    "assets/bookfire2.png",
   ];
 
     //pick a random image
@@ -37,30 +37,31 @@ function draw() {
   //images
   image(FUEL, 0, 0); 
   BOOK.resize(0, 400);
-  image(BOOK, width - 324, height - 472); 
-  image(FLAME, width - 170, height - 290); 
-
-  //star
-  push();
-  translate(width/4.75, height/1.555);
-  star(0, 0, 120, 160, 20);
-  pop();
+  image(BOOK, width - 350, height - 420); 
+  image(FLAME, width - 270, height - 290); 
 
   fill(0);
+  //star
+  push();
+  translate(width/4.75, height/1.35);
+  star(0, 0, 160, 200, 30);
+  pop();
+
+  fill(255);
   textStyle(NORMAL);
   textFont('brim-narrow');
-  textSize(24);
-  text('only', width/4.75, height/1.55 - 48);
+  textSize(36);
+  text('only', width/4.75, height/1.35 - 44);
 
   fill(bgColor);
   textFont('lisbeth-display');
-  textSize(72);
-  text('$99.99', width/4.75, height/1.55 + 24);
+  textSize(76);
+  text('$99.99', width/4.75, height/1.35 + 32);
 
-  fill(0);
+  fill(255);
   textFont('brim-narrow');
-  textSize(16);
-  text('per book', width/4.75, height/1.55 + 64);
+  textSize(28);
+  text('per book', width/4.75, height/1.35 + 86);
 
   //number
   textAlign(RIGHT);
@@ -72,15 +73,19 @@ function draw() {
 
   //type
   textAlign(CENTER);
-  textFont('brim-narrow');
-  textSize(144);
-  fill(0);
-  textStyle(BOLD);
-  text('We Burn Books!', width/2, height/2);
-
+  textFont('pressio-compressed');
+  textSize(330);
   fill(255);
-  textStyle(NORMAL);
-  text('We Burn Books!', width/2, height/2);
+  textStyle(BOLD);
+  text('WE BURN BOOKS!', width/2, height/1.65);
+
+  granulateRedShift(50);
+}
+
+function keyPressed() {
+  if (keyCode === ENTER) {
+    saveCanvas('myCanvas', 'png');
+  }
 }
 
 function star(x, y, radius1, radius2, npoints) {
@@ -96,4 +101,19 @@ function star(x, y, radius1, radius2, npoints) {
     vertex(sx, sy);
   }
   endShape(CLOSE);
+}
+
+
+function granulateRedShift(amount) {
+  loadPixels();
+  const d = pixelDensity();
+  const pixelsCount = 4 * (width * d) * (height * d);
+  for (let i = 0; i < pixelsCount; i += 4) {
+      pixels[i] = pixels[i] + amount;
+      pixels[i+1] = pixels[i+1] + random(-amount, amount);
+      pixels[i+2] = pixels[i+2] + random(-amount*2, amount*2);
+      // comment in, if you want to granulate the alpha value
+      // pixels[i+3] = pixels[i+3] + random(-amount*2, amount*2);
+  }
+  updatePixels();
 }
