@@ -1,3 +1,12 @@
+/* 
+GRAIN
+  source: https://www.fxhash.xyz/article/all-about-that-grain
+CURVES
+  source: https://programmingdesignsystems.com/shape/custom-shapes/index.html
+IMAGES
+  source: https://commons.wikimedia.org/
+*/
+
 var amount;
 
 // Colors
